@@ -9,15 +9,17 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserPrincipal implements UserDetails {
-    private User user;
+    private final User user;
+    private final List<GrantedAuthority> grantedAuthorities;
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(User user, List<GrantedAuthority> grantedAuthorities) {
         this.user = user;
+        this.grantedAuthorities = grantedAuthorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return grantedAuthorities;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.model.Permission;
 import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -7,11 +8,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import application.model.User;
 
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -41,7 +46,7 @@ public class UserController {
         User userExist = userService.findByUsername(user.getUsername());
 
         if (userExist != null){
-            bindingResult.rejectValue("user_login", "error.user", "This user already exist!");
+            bindingResult.rejectValue("username", "error.user", "This user already exist!");
         }
         if (bindingResult.hasErrors()){
             model.setViewName("register");
@@ -55,13 +60,40 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ModelAndView home(){
+    public ModelAndView home(Principal principal){
         ModelAndView model = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByUsername(auth.getName());
 
-        model.addObject("userName", user.getUsername());
+        List<Permission> permissions = userService.findAllPermissionsByUsername(principal.getName());
+        model.addObject("allowedTabs", AllowedTabs.fromPermissions(permissions));
+        model.addObject("userName", principal.getName());
         model.setViewName("index");
+        return model;
+    }
+
+    @GetMapping("/add-role")
+    public ModelAndView addRole(Principal principal){
+        ModelAndView model = new ModelAndView();
+        List<User> userList = userService.getAllUser();
+        List<Permission> permissions = userService.findAllPermissionsByUsername(principal.getName());
+        model.addObject("allowedTabs", AllowedTabs.fromPermissions(permissions));
+
+        model.addObject("allPermissions", userService.getAllPermission());
+        model.addObject("allUsers", userService.getAllUser());
+
+        model.addObject("userName", principal.getName());
+        model.setViewName("admin-add-user-role");
+        return model;
+    }
+
+    @GetMapping("/page-authority/{id}")
+    public ModelAndView pageAuthority(Principal principal, @PathVariable("id") long userId){
+        ModelAndView model = new ModelAndView();
+        User selectedUser = userService.findUserById(userId);
+
+        model.addObject("selectedUser", selectedUser);
+        model.addObject("allPermissions", userService.getAllPermissions());
+        model.addObject("userName", principal.getName());
+        model.setViewName("page-authority");
         return model;
     }
 

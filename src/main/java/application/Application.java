@@ -1,5 +1,6 @@
 package application;
 
+import application.model.Permission;
 import application.model.Role;
 import application.model.User;
 import application.model.UserRole;
@@ -37,17 +38,24 @@ public class Application implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println(roleRepository.findAll().stream().map(r -> r.getName()).collect(Collectors.toList()));
+        System.out.println(userService.getAllPermission());
+        System.out.println(userService.getAllUser());
 
-//        User accountingMember = new User();
-//        accountingMember.setUsername("acc");
-//        accountingMember.setPassword("acc");
-//        userRepository.save(accountingMember);
-//        System.out.println("Tao user acc successfully");
+//        create new user
+//        User hrMem = new User();
+//        hrMem.setUsername("hr");
+//        hrMem.setPassword("hr");
+//        userService.saveUser(hrMem);
+//        System.out.println("Tao user hr successfully");
+
 //
-//        Role accountingRole = new Role();
-//        accountingRole.setName("ACC");
-//        roleRepository.save(accountingRole);
-//        System.out.println("Tao role acc successfully");
+//        create role
+//        Role invRole = new Role();
+//        invRole.setName("INV");
+//        roleRepository.save(invRole);
+//        System.out.println("Tao role inv successfully");
+
+
 //
 //
 //        UserRole accUserRole = new UserRole();
