@@ -1,0 +1,11 @@
+insert into permissions values (1, 'CREATE_ORDER');
+insert into permissions values (2, 'VIEW_ORDER');
+insert into permissions values (3, 'EXPORT');
+insert into permissions values (4, 'IMPORT');
+insert into permissions values (5, 'VIEW_STAFF');
+insert into permissions values (6, 'CREATE_STAFF');
+insert into permissions values (7, 'VIEW_SALARY');
+insert into permissions values (8, 'VIEW_RECEIPT');
+insert into permissions values (9, 'PAY');
+insert into user_roles values (10, 8, 1);
+insert into role_permissions values(1, 10, 3);

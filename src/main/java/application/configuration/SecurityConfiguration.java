@@ -54,7 +54,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                     .antMatchers("/register").permitAll()
-                    .antMatchers("/add-role", "/page-authority", "/save-permissions").hasAuthority("ADD_USER_ROLE")
+                    .antMatchers("/add-role", "/add-permission", "/add-user-role/**", "/save-permissions",
+                            "/add-role-permission/**").hasAuthority("ADD_USER_ROLE")
                     .anyRequest().authenticated()
                     .and()
                 .formLogin().loginPage("/login")

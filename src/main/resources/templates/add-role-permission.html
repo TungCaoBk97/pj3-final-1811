@@ -10,22 +10,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Customer</title>
+    <title>Add Role Permission</title>
 
     <!-- Custom fonts for this template -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
 
     <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<!--    <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">-->
-<!--    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
-<!--    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -47,7 +44,6 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
-
 
         <!-- Heading -->
         <div class="sidebar-heading" style="margin-top: 15px" th:if="${allowedTabs.hasStaff()}">
@@ -119,12 +115,12 @@
         <hr class="sidebar-divider">
 
         <!-- Heading -->
-        <div class="sidebar-heading" th:if="${allowedTabs.hasAdmin()}">
+        <div class="sidebar-heading">
             Super Admin
         </div>
 
         <!-- Nav Item - Pages Quản trị phân quyền-->
-        <li class="nav-item" th:if="${allowedTabs.hasManageAuthorize()}">
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
                aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
@@ -132,10 +128,8 @@
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="add-role.html" th:href="@{/add-role}"
-                       th:if="${allowedTabs.hasAddRoleUser}">Thêm quyền cho <br>người dùng</a>
-                    <a class="collapse-item" href="add-permission.html" th:href="@{/add-permission}"
-                       th:if="${allowedTabs.hasAddPermissionRole}">Thêm permission cho <br>quyền</a>
+                    <a class="collapse-item" href="add-role.html" th:href="@{/add-role}">Thêm quyền cho <br>người dùng</a>
+                    <a class="collapse-item" href="add-permission.html" th:href="@{/add-permission}">Thêm permission cho <br>quyền</a>
                 </div>
             </div>
         </li>
@@ -351,60 +345,59 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-               <div th:if="${allowedTabs.hasStaff()}">
+               <div>
                    <!-- Page Heading -->
-                   <h1 class="h3 mb-2 text-gray-800">Danh sách nhân viên</h1>
-                   <!--                <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.-->
-                   <!--                    For more information about DataTables, please visit the-->
-                   <!--                    <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>-->
+                   <h1 class="h3 mb-2 text-gray-800">Role <span style="font-weight: bold" th:utext="${roleSelected.getName()}"></span></h1>
 
                    <!-- DataTales Example -->
                    <div class="card shadow mb-4">
                        <div class="card-header py-3">
-                           <h6 class="m-0 font-weight-bold text-primary">List all employee</h6>
+                           <h6 class="m-0 font-weight-bold text-primary">Choose Permission for role </h6>
                        </div>
                        <div class="card-body">
                            <div class="table-responsive">
                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                    <thead>
-                                   <tr>
-                                       <th>Name</th>
-                                       <th>Position</th>
-                                       <th>Office</th>
-                                       <th>Age</th>
-                                       <th>Start date</th>
-                                       <th>Salary</th>
-                                   </tr>
+                                       <tr>
+                                           <th>Permissions</th>
+                                       </tr>
                                    </thead>
                                    <tfoot>
-                                   <tr>
-                                       <th>Name</th>
-                                       <th>Position</th>
-                                       <th>Office</th>
-                                       <th>Age</th>
-                                       <th>Start date</th>
-                                       <th>Salary</th>
-                                   </tr>
+                                       <tr>
+                                           <th>Permissions</th>
+                                       </tr>
                                    </tfoot>
                                    <tbody>
-                                   <tr>
-                                       <td>Donna Snider</td>
-                                       <td>Customer Support</td>
-                                       <td>New York</td>
-                                       <td>27</td>
-                                       <td>2011/01/25</td>
-                                       <td>$112,000</td>
-                                   </tr>
+                                        <tr th:each="permission : ${allPermissions}">
+                                            <td>
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-checkbox small">
+                                                        <input type="checkbox" class="custom-control-input add-role-permission-checkbox"
+                                                                id="customCheck" th:value="${permission.getId()}"
+                                                               th:checked="${listPermissionByRoleId.contains(permission)}"
+                                                               th:id="'label-for-per' + ${permission.getId()}" name="remember-me">
+                                                        <label class="custom-control-label label-for-role "
+                                                               for="customCheck"
+                                                               th:for="'label-for-per' + ${permission.getId()}"
+                                                               th:utext="${permission.getName()}">Role</label>
+                                                    </div>
+                                                </div>
+                                            </td>
+<!--                                            <td>-->
+<!--                                                <a href="add-role-permission.html" th:href="@{'/add-role-permission/' + ${role.getId()}}"-->
+<!--                                                   th:utext="${role.getName()}">Name</a>-->
+<!--                                            </td>-->
+                                        </tr>
                                    </tbody>
+                                   <input id="current-role-id" th:type="hidden" th:value="${roleSelected.getId()}" />
+                                   <button id="add-role-permission" >Save Permissions</button>
                                </table>
                            </div>
+
                        </div>
                    </div>
                </div>
 
-                <div th:if="${allowedTabs.hasAdmin()}">
-                    <h1>Page Admin</h1>
-                </div>
 
             </div>
             <!-- /.container-fluid -->
@@ -453,27 +446,22 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<!--<script src="../static/vendor/jquery/jquery.min.js"></script>-->
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!--<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<!--<script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-<!--<script src="../static/js/sb-admin-2.min.js"></script>-->
+<script src="/js/sb-admin-2.min.js"></script>
+<script src="/js/add-role-permission.js"></script>
 
 <!-- Page level plugins -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<!--<script src="../static/vendor/datatables/jquery.dataTables.min.js"></script>-->
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<!--<script src="../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>-->
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
+<script src="/js/demo/datatables-demo.js"></script>
 
 </body>
 

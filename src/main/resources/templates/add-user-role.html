@@ -46,6 +46,74 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Heading -->
+        <div class="sidebar-heading" style="margin-top: 15px" th:if="${allowedTabs.hasStaff()}">
+            Staff
+        </div>
+
+        <li class="nav-item" th:if="${allowedTabs.hasManageSale()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2" aria-expanded="true"
+               aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý bán hàng</span>
+            </a>
+            <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasCreateOrder}">Tạo mới đơn hàng</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasViewOrder}">Xem danh sách đơn hàng</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Pages QL kho -->
+        <li class="nav-item" th:if="${allowedTabs.hasManageInventory()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse3" aria-expanded="true"
+               aria-controls="collapse3">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý kho</span>
+            </a>
+            <div id="collapse3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasExport}">Xuất kho</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasImport}">Nhập kho</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Pages QL nhân sự -->
+        <li class="nav-item" th:if="${allowedTabs.hasHumanResource()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse4" aria-expanded="true"
+               aria-controls="collapse4">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý nhân sự</span>
+            </a>
+            <div id="collapse4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasViewListStaff}">Xem danh sách nhân viên</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasCreateStaff}">Thêm mới nhân viên</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasViewSalary}">Xem danh sách lương</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Pages QL kế toán -->
+        <li class="nav-item" th:if="${allowedTabs.hasManageAccount()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5" aria-expanded="true"
+               aria-controls="collapse5">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý kế toán</span>
+            </a>
+            <div id="collapse5" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasListReceipt}">Danh sách hóa đơn</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasListOrder}">Danh sách đơn hàng</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasPay}">Thanh toán</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Heading -->
         <div class="sidebar-heading">
             Super Admin
         </div>
@@ -59,7 +127,8 @@
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="admin-add-user-role.html" th:href="@{/add-role}">Thêm người dùng vào <br>quyền</a>
+                    <a class="collapse-item" href="add-role.html" th:href="@{/add-role}">Thêm quyền cho <br>người dùng</a>
+                    <a class="collapse-item" href="add-permission.html" th:href="@{/add-permission}">Thêm permission cho <br>quyền</a>
                 </div>
             </div>
         </li>
@@ -277,44 +346,54 @@
 
                <div>
                    <!-- Page Heading -->
-                   <h1 class="h3 mb-2 text-gray-800">User <span th:utext="${selectedUser.getUsername()}"></span></h1>
+                   <h1 class="h3 mb-2 text-gray-800">User <span style="font-weight: bold" th:utext="${selectedUser.getUsername()}"></span></h1>
 
                    <!-- DataTales Example -->
                    <div class="card shadow mb-4">
                        <div class="card-header py-3">
-                           <h6 class="m-0 font-weight-bold text-primary">DataTables</h6>
+                           <h6 class="m-0 font-weight-bold text-primary">Choose role </h6>
                        </div>
                        <div class="card-body">
                            <div class="table-responsive">
                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                    <thead>
                                        <tr>
-                                           <th>Permission</th>
+                                           <th>Roles</th>
                                        </tr>
                                    </thead>
                                    <tfoot>
                                        <tr>
-                                           <th>Permission</th>
+                                           <th>Roles</th>
                                        </tr>
                                    </tfoot>
                                    <tbody>
-                                        <tr th:each="permission : ${allPermissions}">
+                                        <tr th:each="role : ${allRoles}">
                                             <td>
                                                 <div class="form-group">
                                                     <div class="custom-control custom-checkbox small">
-                                                        <input type="checkbox" class="custom-control-input" id="customCheck"
-                                                               th:id="'label-for-per' + ${permission.getId()}" name="remember-me">
-                                                        <label class="custom-control-label" for="customCheck"
-                                                               th:for="'label-for-per' + ${permission.getId()}" th:utext="${permission.getName()}"
-                                                                th:value="${permission.getId()}">Name</label>
+                                                        <input type="checkbox" class="custom-control-input add-user-role-checkbox"
+                                                               th:value="${role.getId()}" id="customCheck"
+                                                               th:checked="${roleListBySelectedUser.contains(role)}"
+                                                               th:id="'label-for-role' + ${role.getId()}" name="remember-me">
+                                                        <label class="custom-control-label label-for-role"
+                                                               for="customCheck"
+                                                               th:for="'label-for-role' + ${role.getId()}"
+                                                               th:utext="${role.getName()}"
+                                                               >Role</label>
                                                     </div>
                                                 </div>
                                             </td>
+<!--                                            <td>-->
+<!--                                                <a href="add-role-permission.html" th:href="@{'/add-role-permission/' + ${role.getId()}}"-->
+<!--                                                   th:utext="${role.getName()}">Name</a>-->
+<!--                                            </td>-->
                                         </tr>
                                    </tbody>
-                                   <button id="save-permissions">Save</button>
+                                   <input id="current-user-id" th:type="hidden" th:value="${selectedUser.getId()}" />
+                                   <button id="add-user-role">Save</button>
                                </table>
                            </div>
+
                        </div>
                    </div>
                </div>
@@ -378,7 +457,7 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/js/sb-admin-2.min.js"></script>
-<script src="/js/page-authority.js"></script>
+<script src="/js/add-user-role.js"></script>
 <!--<script src="../static/js/sb-admin-2.min.js"></script>-->
 
 <!-- Page level plugins -->

@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Customer</title>
+    <title>Admin add permission role</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -18,14 +18,12 @@
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<!--    <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">-->
-<!--    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
-<!--    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="../static/css/styles.css">
+
+<!--    <link rel="stylesheet" href="../static/css/styles.css">-->
 
 </head>
 
@@ -47,7 +45,6 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
-
 
         <!-- Heading -->
         <div class="sidebar-heading" style="margin-top: 15px" th:if="${allowedTabs.hasStaff()}">
@@ -130,7 +127,7 @@
                 <i class="fas fa-fw fa-folder"></i>
                 <span>Quản trị phân quyền</span>
             </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="add-role.html" th:href="@{/add-role}"
                        th:if="${allowedTabs.hasAddRoleUser}">Thêm quyền cho <br>người dùng</a>
@@ -316,7 +313,8 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:utext="${userName}">Valerie Luna</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:if="${userName}"
+                                  th:utext="${userName}">UserName</span>
                             <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                         </a>
                         <!-- Dropdown - User Information -->
@@ -350,64 +348,78 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
-               <div th:if="${allowedTabs.hasStaff()}">
-                   <!-- Page Heading -->
-                   <h1 class="h3 mb-2 text-gray-800">Danh sách nhân viên</h1>
-                   <!--                <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.-->
-                   <!--                    For more information about DataTables, please visit the-->
-                   <!--                    <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>-->
-
-                   <!-- DataTales Example -->
-                   <div class="card shadow mb-4">
-                       <div class="card-header py-3">
-                           <h6 class="m-0 font-weight-bold text-primary">List all employee</h6>
-                       </div>
-                       <div class="card-body">
-                           <div class="table-responsive">
-                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                   <thead>
-                                   <tr>
-                                       <th>Name</th>
-                                       <th>Position</th>
-                                       <th>Office</th>
-                                       <th>Age</th>
-                                       <th>Start date</th>
-                                       <th>Salary</th>
-                                   </tr>
-                                   </thead>
-                                   <tfoot>
-                                   <tr>
-                                       <th>Name</th>
-                                       <th>Position</th>
-                                       <th>Office</th>
-                                       <th>Age</th>
-                                       <th>Start date</th>
-                                       <th>Salary</th>
-                                   </tr>
-                                   </tfoot>
-                                   <tbody>
-                                   <tr>
-                                       <td>Donna Snider</td>
-                                       <td>Customer Support</td>
-                                       <td>New York</td>
-                                       <td>27</td>
-                                       <td>2011/01/25</td>
-                                       <td>$112,000</td>
-                                   </tr>
-                                   </tbody>
-                               </table>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-
                 <div th:if="${allowedTabs.hasAdmin()}">
-                    <h1>Page Admin</h1>
-                </div>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Choose Role</h6>
+                        </div>
+                        <div class="card-body">
+                            <!--user table-->
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Username</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:unless="${allRoles}">
+                                            <td> No role Available </td>
+                                        </tr>
+                                        <tr th:each="role : ${allRoles}">
+<!--                                            <td th:utext="${user.getUsername()}">Name</td>-->
+                                            <td>
+                                                <a href="add-role-permission.html" th:href="@{'/add-role-permission/' + ${role.getId()}}"
+                                                   th:utext="${role.getName()}">Name</a>
+                                            </td>
+<!--                                            <td>-->
+<!--                                                <div class="form-group">-->
+<!--                                                    <div class="custom-control custom-checkbox small">-->
+<!--                                                        <input type="checkbox" class="custom-control-input" id="customCheck"-->
+<!--                                                               th:id="'label-for-user' + ${user.getId()}" name="remember-me">-->
+<!--                                                        <label class="custom-control-label" th:utext="${user.getUsername()}"-->
+<!--                                                                th:value="${user.getUsername()}">Name</label>-->
+<!--                                                        <a href="add-user-role.html" th:href="@{'/add-user-role/' + ${user.getId()}}"-->
+<!--                                                           style="float: right">Edit permission</a>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </td>-->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
+                <div th:unless="${allowedTabs.hasAdmin()}">
+                    <h1>You did not have permission</h1>
+                </div>
+                <!--                <h1>Page add user</h1>-->
+<!--                <table>-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th> Users </th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr th:unless="${allUsers}">-->
+<!--                        <td> No User Available </td>-->
+<!--                    </tr>-->
+<!--                    <tr th:each="user : ${allUsers}">-->
+<!--                        <td><span th:utext="${user.getUsername()}"> Name </span></td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
             </div>
             <!-- /.container-fluid -->
+
+
 
         </div>
         <!-- End of Main Content -->
@@ -464,6 +476,7 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
+<script src="/js/add-user-role.js"></script>
 <!--<script src="../static/js/sb-admin-2.min.js"></script>-->
 
 <!-- Page level plugins -->

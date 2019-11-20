@@ -1,40 +1,38 @@
 package application.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import application.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 class SavePermissionsBody {
-    private int roleId;
+    public long roleId;
 
-    private List<Integer> permissionIds;
+    public List<Long> permissionIds;
+}
 
-    public int getRoleId() {
-        return roleId;
-    }
+class SaveRolesBody {
+    public long userId;
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public List<Integer> getPermissionIds() {
-        return permissionIds;
-    }
-
-    public void setPermissionIds(List<Integer> permissionIds) {
-        this.permissionIds = permissionIds;
-    }
+    public List<Long> roleIds;
 }
 
 @RestController
 public class UserRestController {
 
-    @PostMapping("/save-permissions")
+    @Autowired
+    private PermissionService permissionService;
+
+    @PostMapping("/add-role-permission")
     public String savePermissions(@RequestBody SavePermissionsBody body) {
-        System.out.println(body.getRoleId());
-        System.out.println(body.getPermissionIds());
-        return "OK";
+        permissionService.updatePermissions(body.roleId, body.permissionIds);
+        return "redirect:/add-role-permission/" + body.roleId;
+    }
+
+    @PostMapping("/add-user-role")
+    public String saveRoles(@RequestBody SaveRolesBody body) {
+        permissionService.updateRoles(body.userId, body.roleIds);
+        return "redirect:/add-user-role/" + body.userId;
     }
 }

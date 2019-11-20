@@ -1,16 +1,15 @@
 package application.controller;
 
 import application.model.Permission;
+import application.model.Role;
+import application.service.PermissionService;
 import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import application.model.User;
 
@@ -20,6 +19,9 @@ import java.util.List;
 
 @Controller
 public class UserController {
+
+    private User userSelected = new User();
+    private Role roleSelected = new Role();
 
     @Autowired
     private UserService userService;
@@ -77,23 +79,60 @@ public class UserController {
         List<Permission> permissions = userService.findAllPermissionsByUsername(principal.getName());
         model.addObject("allowedTabs", AllowedTabs.fromPermissions(permissions));
 
-        model.addObject("allPermissions", userService.getAllPermission());
         model.addObject("allUsers", userService.getAllUser());
 
         model.addObject("userName", principal.getName());
-        model.setViewName("admin-add-user-role");
+        model.setViewName("add-role");
         return model;
     }
 
-    @GetMapping("/page-authority/{id}")
-    public ModelAndView pageAuthority(Principal principal, @PathVariable("id") long userId){
+    @GetMapping("/add-permission")
+    public ModelAndView addPermission(Principal principal){
         ModelAndView model = new ModelAndView();
-        User selectedUser = userService.findUserById(userId);
+        List<Permission> permissions = userService.findAllPermissionsByUsername(principal.getName());
+        model.addObject("allowedTabs", AllowedTabs.fromPermissions(permissions));
 
-        model.addObject("selectedUser", selectedUser);
-        model.addObject("allPermissions", userService.getAllPermissions());
+        model.addObject("allRoles", userService.getAllRoles());
+
         model.addObject("userName", principal.getName());
-        model.setViewName("page-authority");
+        model.setViewName("add-permission");
+        return model;
+    }
+
+    @GetMapping("/add-user-role/{id}")
+    public ModelAndView addUserROle(Principal principal, @PathVariable("id") long userId){
+        ModelAndView model = new ModelAndView();
+        userSelected = userService.findUserById(userId);
+        List<Role> roleList = userService.getAllRoles();
+        List<Role> roleListBySelectedUser = userService.getAllRolesByUser(userSelected);
+
+        //get permission for principal
+        List<Permission> permissions = userService.findAllPermissionsByUsername(principal.getName());
+        model.addObject("allowedTabs", AllowedTabs.fromPermissions(permissions));
+
+        model.addObject("selectedUser", userSelected);
+        model.addObject("roleListBySelectedUser", roleListBySelectedUser);
+        model.addObject("allRoles", roleList);
+        model.addObject("userName", principal.getName());
+        model.setViewName("add-user-role");
+        return model;
+    }
+
+
+    @GetMapping("/add-role-permission/{id}")
+    public ModelAndView addPermissionRole(Principal principal, @PathVariable("id") long roleId){
+        ModelAndView model = new ModelAndView();
+        roleSelected = userService.findRoleById(roleId);
+        List<Permission> listPermissionByRoleId = userService.findAllPermissionsByRoleId(roleSelected.getId());
+
+        List<Permission> permissions = userService.findAllPermissionsByUsername(principal.getName());
+        model.addObject("allowedTabs", AllowedTabs.fromPermissions(permissions));
+
+        model.addObject("allPermissions", userService.getAllPermissions());
+        model.addObject("listPermissionByRoleId", listPermissionByRoleId);
+        model.addObject("userName", principal.getName());
+        model.addObject("roleSelected", roleSelected);
+        model.setViewName("add-role-permission");
         return model;
     }
 

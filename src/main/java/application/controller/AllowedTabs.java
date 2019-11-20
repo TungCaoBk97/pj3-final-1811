@@ -22,6 +22,7 @@ public class AllowedTabs {
         allowedTabs.hasListReceipt = permissionSet.contains("VIEW_RECEIPT");
         allowedTabs.hasPay = permissionSet.contains("PAY");
         allowedTabs.hasAddRoleUser = permissionSet.contains("ADD_USER_ROLE");
+        allowedTabs.hasAddPermissionRole = permissionSet.contains("ADD_PERMISSION_ROLE");
 
 
         return allowedTabs;
@@ -38,6 +39,7 @@ public class AllowedTabs {
     public boolean hasListOrder;
     public boolean hasPay;
     public boolean hasAddRoleUser;
+    public boolean hasAddPermissionRole;
 
     public boolean hasManageSale() {
         return hasCreateOrder || hasViewOrder;
@@ -56,7 +58,7 @@ public class AllowedTabs {
     }
 
     public boolean hasManageAuthorize() {
-        return hasAddRoleUser;
+        return hasAddRoleUser || hasAddPermissionRole;
     }
 
     public boolean hasStaff() {

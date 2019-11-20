@@ -1,13 +1,12 @@
 package application.service;
 
 import application.model.Permission;
-import application.repository.PermissionRepository;
+import application.model.Role;
+import application.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import application.model.User;
-import application.repository.RoleRepository;
-import application.repository.UserRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,13 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RolePermissionRepository rolePermissionRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -36,16 +41,31 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    public Role findRoleById(long roleId) {
+        return roleRepository.findById(roleId);
+    }
+
     public List<Permission> findAllPermissionsByUsername(String username) {
         return permissionRepository.findAllByUsername(username);
+    }
+
+    public List<Permission> findAllPermissionsByRoleId(long roleId) {
+        return permissionRepository.findPermissionByRole(roleId);
     }
 
     public List<String> getAllPermission() {
         return permissionRepository.findAll().stream().map(r -> r.getName()).collect(Collectors.toList());
     }
 
+    public List<Role> getAllRoles(){
+        return roleRepository.findAll();
+    }
+
+    public List<Role> getAllRolesByUser(User user){
+        return userRoleRepository.getAllByUser(user);
+    }
+
     public List<Permission> getAllPermissions() {
-//        return userRepository.findAll().stream().map(r -> r.getUsername()).collect(Collectors.toList());
         return permissionRepository.findAll();
     }
 
@@ -61,4 +81,9 @@ public class UserService {
         user.setLastUpdatedDate(currentDate);
         userRepository.save(user);
     }
+
+    public List<Long> getAllPermissionByRoleId (long roleId){
+        return rolePermissionRepository.getAllPermissionByRoleId(roleId);
+    }
+
 }

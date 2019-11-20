@@ -1,12 +1,7 @@
 package application;
 
-import application.model.Permission;
-import application.model.Role;
-import application.model.User;
-import application.model.UserRole;
-import application.repository.RoleRepository;
-import application.repository.UserRepository;
-import application.repository.UserRoleRepository;
+import application.model.*;
+import application.repository.*;
 import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -35,11 +30,22 @@ public class Application implements ApplicationRunner {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PermissionRepository permissionRepository;
+
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println(roleRepository.findAll().stream().map(r -> r.getName()).collect(Collectors.toList()));
-        System.out.println(userService.getAllPermission());
-        System.out.println(userService.getAllUser());
+//        User admin = userService.findByUsername("admin");
+//        Role ADMIN = roleRepository.findByName("ADMIN");
+//        Permission addUserRole = permissionRepository.findByName("ADD_USER_ROLE");
+//        Permission addRolePermission = permissionRepository.findByName("ADD_PERMISSION_ROLE");
+//
+//        rolePermissionRepository.save(new RolePermission(ADMIN, addUserRole));
+//        rolePermissionRepository.save(new RolePermission(ADMIN, addRolePermission));
+
 
 //        create new user
 //        User hrMem = new User();

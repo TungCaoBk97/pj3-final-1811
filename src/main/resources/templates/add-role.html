@@ -46,6 +46,88 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
+        <!-- Heading -->
+        <div class="sidebar-heading" style="margin-top: 15px" th:if="${allowedTabs.hasStaff()}">
+            Staff
+        </div>
+
+        <li class="nav-item" th:if="${allowedTabs.hasManageSale()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2" aria-expanded="true"
+               aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý bán hàng</span>
+            </a>
+            <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasCreateOrder}">Tạo mới đơn hàng</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasViewOrder}">Xem danh sách đơn hàng</a>
+                </div>
+            </div>
+        </li>
+        <!-- Nav Item - Pages QL bán hàng -->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"-->
+        <!--               aria-controls="collapseTwo">-->
+        <!--                <i class="fas fa-fw fa-cog"></i>-->
+        <!--                <span>Quản lý bán hàng</span>-->
+        <!--            </a>-->
+        <!--            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+        <!--                <div class="bg-white py-2 collapse-inner rounded">-->
+        <!--                    <a class="collapse-item" href="#">Tạo mới đơn hàng</a>-->
+        <!--                    <a class="collapse-item" href="#">Xem danh sách đơn hàng</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </li>-->
+
+        <!-- Nav Item - Pages QL kho -->
+        <li class="nav-item" th:if="${allowedTabs.hasManageInventory()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse3" aria-expanded="true"
+               aria-controls="collapse3">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý kho</span>
+            </a>
+            <div id="collapse3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasExport}">Xuất kho</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasImport}">Nhập kho</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Pages QL nhân sự -->
+        <li class="nav-item" th:if="${allowedTabs.hasHumanResource()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse4" aria-expanded="true"
+               aria-controls="collapse4">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý nhân sự</span>
+            </a>
+            <div id="collapse4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasViewListStaff}">Xem danh sách nhân viên</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasCreateStaff}">Thêm mới nhân viên</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasViewSalary}">Xem danh sách lương</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Pages QL kế toán -->
+        <li class="nav-item" th:if="${allowedTabs.hasManageAccount()}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5" aria-expanded="true"
+               aria-controls="collapse5">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý kế toán</span>
+            </a>
+            <div id="collapse5" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasListReceipt}">Danh sách hóa đơn</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasListOrder}">Danh sách đơn hàng</a>
+                    <a class="collapse-item" href="#" th:if="${allowedTabs.hasPay}">Thanh toán</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
         <!-- Heading -->
         <div class="sidebar-heading" th:if="${allowedTabs.hasAdmin()}">
@@ -61,7 +143,10 @@
             </a>
             <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item active" href="admin-add-user-role.html" th:href="@{/add-role}">Thêm người dùng vào <br>quyền</a>
+                    <a class="collapse-item" href="add-role.html" th:href="@{/add-role}"
+                       th:if="${allowedTabs.hasAddRoleUser}">Thêm quyền cho <br>người dùng</a>
+                    <a class="collapse-item" href="add-permission.html" th:href="@{/add-permission}"
+                       th:if="${allowedTabs.hasAddPermissionRole}">Thêm permission cho <br>quyền</a>
                 </div>
             </div>
         </li>
@@ -280,7 +365,7 @@
                 <div th:if="${allowedTabs.hasAdmin()}">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Choose User</h6>
                         </div>
                         <div class="card-body">
                             <!--user table-->
@@ -303,7 +388,7 @@
                                         <tr th:each="user : ${allUsers}">
 <!--                                            <td th:utext="${user.getUsername()}">Name</td>-->
                                             <td>
-                                                <a href="page-authority.html" th:href="@{'/page-authority/' + ${user.getId()}}"
+                                                <a href="add-user-role.html" th:href="@{'/add-user-role/' + ${user.getId()}}"
                                                    th:utext="${user.getUsername()}">Name</a>
                                             </td>
 <!--                                            <td>-->
@@ -313,7 +398,7 @@
 <!--                                                               th:id="'label-for-user' + ${user.getId()}" name="remember-me">-->
 <!--                                                        <label class="custom-control-label" th:utext="${user.getUsername()}"-->
 <!--                                                                th:value="${user.getUsername()}">Name</label>-->
-<!--                                                        <a href="page-authority.html" th:href="@{'/page-authority/' + ${user.getId()}}"-->
+<!--                                                        <a href="add-user-role.html" th:href="@{'/add-user-role/' + ${user.getId()}}"-->
 <!--                                                           style="float: right">Edit permission</a>-->
 <!--                                                    </div>-->
 <!--                                                </div>-->
@@ -329,22 +414,6 @@
                 <div th:unless="${allowedTabs.hasAdmin()}">
                     <h1>You did not have permission</h1>
                 </div>
-                <!--                <h1>Page add user</h1>-->
-<!--                <table>-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th> Users </th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                    <tr th:unless="${allUsers}">-->
-<!--                        <td> No User Available </td>-->
-<!--                    </tr>-->
-<!--                    <tr th:each="user : ${allUsers}">-->
-<!--                        <td><span th:utext="${user.getUsername()}"> Name </span></td>-->
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
             </div>
             <!-- /.container-fluid -->
 
@@ -405,7 +474,7 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
-<script src="js/page-authority.js"></script>
+<script src="/js/add-user-role.js"></script>
 <!--<script src="../static/js/sb-admin-2.min.js"></script>-->
 
 <!-- Page level plugins -->
